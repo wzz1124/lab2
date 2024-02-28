@@ -4,8 +4,9 @@
 CC = gcc
 CFLAGS = -O1 -Wall -m32
 LIBS = -lm
+GITFLAGS = -q --no-verify --allow-empty
 
-all: btest fshow ishow submit
+all: btest fshow ishow submit commit
 
 btest: btest.c bits.c decl.c tests.c btest.h bits.h
 	$(CC) $(CFLAGS) $(LIBS) -o btest bits.c btest.c decl.c tests.c
@@ -21,7 +22,7 @@ btestexplicit:
 	$(CC) $(CFLAGS) $(LIBS) -o btest bits.c btest.c decl.c tests.c 
 
 commit:
-	@git add . -A --ignore-errors
+	-@git add . -A --ignore-errors
 	-@while (test -e .git/index.lock); do sleep 0.1; done
 	-@(id -un && uname -a && uptime && (head -c 20 /dev/urandom | hexdump -v -e '"%02x"')) | git commit -F - $(GITFLAGS)
 
